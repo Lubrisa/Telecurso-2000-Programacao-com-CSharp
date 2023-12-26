@@ -3,7 +3,32 @@
 {
 	"name": "C# (.NET)",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0"
+	"image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"FranRuizSantaclara.high-contrast-theme",
+				"ms-dotnettools.vscode-dotnet-runtime",
+				"aaron-bond.better-comments",
+				"streetsidesoftware.code-spell-checker-portuguese-brazilian",
+				"ms-dotnettools.csharp",
+				"ms-dotnettools.csdevkit",
+				"jorgeserrano.vscode-csharp-snippets",
+				"streetsidesoftware.code-spell-checker",
+				"ms-azuretools.vscode-docker",
+				"donjayamanne.git-extension-pack",
+				"donjayamanne.githistory",
+				"felipecaputo.git-project-manager",
+				"codezombiech.gitignore",
+				"eamodio.gitlens",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"ms-dotnettools.vscodeintellicode-csharp",
+				"ziyasal.vscode-open-in-github",
+				"alefragnani.project-manager",
+				"vscode-icons-team.vscode-icons"
+			]
+		}
+	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
