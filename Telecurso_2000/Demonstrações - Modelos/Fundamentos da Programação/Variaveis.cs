@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Telecurso2000Programacao.Drawers;
 
 namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Modelo
@@ -7,6 +8,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
     /// </summary>
     public unsafe class Variaveis
     {
+#pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         /// <summary>
         /// Demonstra como as variáveis funcionam internamente (expõe o endereço subjacente).
         /// </summary>
@@ -17,9 +19,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             int x = 0;
             DrawAddressTableEntry(&x, nameof(x));
             string y = "str";
-#pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
             DrawAddressTableEntry(&y, nameof(y));
-#pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
             bool z = false;
             DrawAddressTableEntry(&z, nameof(z));
 
@@ -65,13 +65,9 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             object w;
 
             Console.WriteLine(GetVariableDeclaration(&x, nameof(x)));
-#pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
             Console.WriteLine(GetVariableDeclaration(&y, nameof(y)));
-#pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
             Console.WriteLine(GetVariableDeclaration(&z, nameof(z)));
-#pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
             Console.WriteLine(GetVariableDeclaration(&w, nameof(w)));
-#pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
 
             SeparatorDrawer.DrawSeparator();
         }
@@ -110,19 +106,60 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             SeparatorDrawer.DrawSeparator();
         }
 
+        /// <summary>
+        /// Demonstra como os tipos de valor e referência funcionam.
+        /// </summary>
+        public void TiposDeValorEReferencia()
+        {
+            SeparatorDrawer.DrawSeparator("Tipos de Valor e Referência");
+            SeparatorDrawer.DrawSeparator("Atribuição por Valor");
+
+            int w = 0;
+            int x = w;
+            DrawAddressTableEntry(&w, nameof(w));
+            DrawAddressTableEntry(&x, nameof(x));
+
+            SeparatorDrawer.DrawSeparator("Atribuição por Referência");
+
+            string y = "referência";
+            string z = y;
+            DrawAddressTableEntry(&y, $"variável {nameof(y)}");
+            DrawAddressTableEntry(&z, $"variável {nameof(z)}");
+
+            Console.WriteLine();
+
+            DrawAddressTableEntry(y, $"valor de {nameof(y)}");
+            DrawAddressTableEntry(z, $"valor de {nameof(z)}");
+
+            SeparatorDrawer.DrawSeparator();
+        }
+
         #region Helpers
         /// <summary>
         /// Converte a referência de ponteiro em um endereço de memória.
         /// </summary>
         /// <typeparam name="T">Tipo da variável referenciada pelo ponteiro.</typeparam>
         /// <param name="pointer">O ponteiro que terá sua referência convertida.</param>
-        /// <returns>Um endereço de memória.</returns>
-#pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
+        /// <returns>Um endereço de memória em string.</returns>
         private string StringfyAddress<T>(T* pointer)
-#pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         {
             string addressToHexadecimal = ((int)pointer).ToString("X");
             return $"0x{addressToHexadecimal}";
+        }
+
+        /// <summary>
+        /// Converte a referência de uma instância de um tipo de referência em um endereço de memória.
+        /// </summary>
+        /// <typeparam name="T">O tipo da referência.</typeparam>
+        /// <param name="obj">O objeto que terá seu endereço retornado.</param>
+        /// <returns>Um endereço de memória em string.</returns>
+        private string StringfyAddress<T>(T obj) where T : class
+        {
+            var handle = GCHandle.Alloc(obj, GCHandleType.Pinned);
+            string handleToHexadecimal = handle.AddrOfPinnedObject().ToString("X");
+            handle.Free();
+
+            return $"0x{handleToHexadecimal}";
         }
 
         /// <summary>
@@ -131,13 +168,20 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <typeparam name="T">O tipo da variável referenciada pelo ponteiro.</typeparam>
         /// <param name="pointer">Um ponteiro com uma referência a um endereço de memória.</param>
         /// <param name="variableName">O nome da variável referenciada pelo ponteiro.</param>
-#pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         private void DrawAddressTableEntry<T>(T* pointer, string variableName)
-#pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         {
             string variableColum = $"Variável: {variableName}".PadRight(25);
             string valueColum = $"Valor: {*pointer}".PadRight(25);
             string addressColum = $"Endereço: {StringfyAddress(pointer)}";
+
+            Console.WriteLine(variableColum + valueColum + addressColum);
+        }
+
+        private void DrawAddressTableEntry<T>(T obj, string variableName) where T : class
+        {
+            string variableColum = $"Variável: {variableName}".PadRight(25);
+            string valueColum = $"Valor: {obj}".PadRight(25);
+            string addressColum = $"Endereço: {StringfyAddress(obj)}";
 
             Console.WriteLine(variableColum + valueColum + addressColum);
         }
@@ -169,9 +213,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <typeparam name="T">O tipo da variável que será verificada.</typeparam>
         /// <param name="pointer">Um ponteiro com o endereço da variável que será verificada.</param>
         /// <returns>True se a variável foi inicializada, false caso ela provavelmente não tenha sido.</returns>
-#pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         private bool WasInitialized<T>(T* pointer) => !Equals(*pointer, default(T));
-#pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
 
         /// <summary>
         /// Cria uma mensagem que corresponde a como uma variável foi declarada de acordo com seu estado atual.
@@ -180,9 +222,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <param name="pointer">Um ponteiro para o endereço da variável que será escrita.</param>
         /// <param name="variableName">O nome da variável escrita.</param>
         /// <returns>Uma mensagem que corresponde a como a variável deve ter sido declarada de acordo com seu valor atual.</returns>
-#pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         private string GetVariableDeclaration<T>(T* pointer, string variableName)
-#pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         {
             const string UNINITIALIZED_MESSAGE = "// A variável provavelmente não foi inicializada";
             const string INITIALIZED_MESSAGE = "// A variável foi inicializada";
@@ -207,5 +247,6 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             return $"{value} {IS_OF_TYPE_MESSAGE} {typeof(T)}";
         }
         #endregion
+#pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
     }
 }
