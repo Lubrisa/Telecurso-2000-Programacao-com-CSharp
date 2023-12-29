@@ -64,14 +64,48 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             bool z = false;
             object w;
 
-            Console.WriteLine(DrawVariableDeclaration(&x, nameof(x)));
+            Console.WriteLine(GetVariableDeclaration(&x, nameof(x)));
 #pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
-            Console.WriteLine(DrawVariableDeclaration(&y, nameof(y)));
+            Console.WriteLine(GetVariableDeclaration(&y, nameof(y)));
 #pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
-            Console.WriteLine(DrawVariableDeclaration(&z, nameof(z)));
+            Console.WriteLine(GetVariableDeclaration(&z, nameof(z)));
 #pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
-            Console.WriteLine(DrawVariableDeclaration(&w, nameof(w)));
+            Console.WriteLine(GetVariableDeclaration(&w, nameof(w)));
 #pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
+
+            SeparatorDrawer.DrawSeparator();
+        }
+
+        /// <summary>
+        /// Demonstra como funciona a conversão de tipo, tanto implícita quanto explicita.
+        /// </summary>
+        public void TypeCasting()
+        {
+            SeparatorDrawer.DrawSeparator("Conversão de Tipo - Conversão Implícita");
+
+            char a = 'a';
+            int b = a;
+            long c = b;
+            float d = c;
+            double e = d;
+            Console.WriteLine(GetIsOfTypeMessage(a));
+            Console.WriteLine(GetIsOfTypeMessage(b));
+            Console.WriteLine(GetIsOfTypeMessage(c));
+            Console.WriteLine(GetIsOfTypeMessage(d));
+            Console.WriteLine(GetIsOfTypeMessage(e));
+
+            SeparatorDrawer.DrawSeparator("Conversão de Tipo - Conversão Implícita");
+
+            double v = 173233333252.763363337d;
+            float w = (float)v;
+            long x = (long)w;
+            int y = (int)x;
+            char z = (char)y;
+            Console.WriteLine(GetIsOfTypeMessage(v));
+            Console.WriteLine(GetIsOfTypeMessage(w));
+            Console.WriteLine(GetIsOfTypeMessage(x));
+            Console.WriteLine(GetIsOfTypeMessage(y));
+            Console.WriteLine(GetIsOfTypeMessage(z));
 
             SeparatorDrawer.DrawSeparator();
         }
@@ -136,21 +170,18 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <param name="pointer">Um ponteiro com o endereço da variável que será verificada.</param>
         /// <returns>True se a variável foi inicializada, false caso ela provavelmente não tenha sido.</returns>
 #pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
-        private bool WasInitialized<T>(T* pointer) where T : notnull
+        private bool WasInitialized<T>(T* pointer) => !Equals(*pointer, default(T));
 #pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
-        {
-            return !Equals(*pointer, default(T));
-        }
 
         /// <summary>
-        /// Escreve no console como uma variável foi declarada.
+        /// Cria uma mensagem que corresponde a como uma variável foi declarada de acordo com seu estado atual.
         /// </summary>
         /// <typeparam name="T">O tipo da variável que será escrita.</typeparam>
         /// <param name="pointer">Um ponteiro para o endereço da variável que será escrita.</param>
         /// <param name="variableName">O nome da variável escrita.</param>
         /// <returns>Uma mensagem que corresponde a como a variável deve ter sido declarada de acordo com seu valor atual.</returns>
 #pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
-        private string DrawVariableDeclaration<T>(T* pointer, string variableName)
+        private string GetVariableDeclaration<T>(T* pointer, string variableName)
 #pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         {
             const string UNINITIALIZED_MESSAGE = "// A variável provavelmente não foi inicializada";
@@ -161,6 +192,19 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
                     ? $"= {*pointer} " + INITIALIZED_MESSAGE
                     : UNINITIALIZED_MESSAGE)
                 + ";";
+        }
+
+        /// <summary>
+        /// Cria uma mensagem que diz qual o tipo de um valor.
+        /// </summary>
+        /// <typeparam name="T">O tipo do valor que será descrito na mensagem.</typeparam>
+        /// <param name="value">O valor que terá seu tipo descrito.</param>
+        /// <returns>Uma mensagem dizendo qual é o tipo do valor passado.</returns>
+        private string GetIsOfTypeMessage<T>(T value)
+        {
+            const string IS_OF_TYPE_MESSAGE = "é um valor do tipo: ";
+
+            return $"{value} {IS_OF_TYPE_MESSAGE} {typeof(T)}";
         }
         #endregion
     }
