@@ -12,9 +12,10 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <summary>
         /// Demonstra como as variáveis funcionam internamente (expõe o endereço subjacente).
         /// </summary>
-        public void Definicao()
+        public Variaveis Definicao()
         {
             SeparatorDrawer.DrawSeparator("Definição de variável");
+            Console.WriteLine();
 
             int x = 0;
             DrawAddressTableEntry(&x, nameof(x));
@@ -23,15 +24,19 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             bool z = false;
             DrawAddressTableEntry(&z, nameof(z));
 
+            Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
+
+            return this;
         }
 
         /// <summary>
         /// Demonstra quais são os tipos primitivos do C#.
         /// </summary>
-        public void TiposPrimitivos()
+        public Variaveis TiposPrimitivos()
         {
             SeparatorDrawer.DrawSeparator("Tipos Primitivos");
+            Console.WriteLine();
 
             DrawTypeTableEntry(values: [true, false], notes: "internamente é um bit");
             DrawTypeTableEntry(values: [byte.MinValue, byte.MaxValue]);
@@ -49,15 +54,19 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             DrawTypeTableEntry(values: [short.MinValue, short.MaxValue]);
             DrawTypeTableEntry(values: [ushort.MinValue, ushort.MaxValue]);
 
+            Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
+
+            return this;
         }
 
         /// <summary>
         /// Demonstra como as variáveis são declaradas e atribuídas.
         /// </summary>
-        public void DeclaracaoEAtribuicao()
+        public Variaveis DeclaracaoEAtribuicao()
         {
             SeparatorDrawer.DrawSeparator("Declaração e Atribuição");
+            Console.WriteLine();
 
             int x;
             string y = "declarado";
@@ -69,15 +78,21 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             Console.WriteLine(GetVariableDeclaration(&z, nameof(z)));
             Console.WriteLine(GetVariableDeclaration(&w, nameof(w)));
 
+            Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
+
+            return this;
         }
 
         /// <summary>
         /// Demonstra como funciona a conversão de tipo, tanto implícita quanto explicita.
         /// </summary>
-        public void TypeCasting()
+        public Variaveis TypeCasting()
         {
-            SeparatorDrawer.DrawSeparator("Conversão de Tipo - Conversão Implícita");
+            SeparatorDrawer.DrawSeparator("Conversão de Tipo");
+            Console.WriteLine();
+            SeparatorDrawer.DrawSeparator("Conversão Implícita");
+            Console.WriteLine();
 
             char a = 'a';
             int b = a;
@@ -90,7 +105,9 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             Console.WriteLine(GetIsOfTypeMessage(d));
             Console.WriteLine(GetIsOfTypeMessage(e));
 
-            SeparatorDrawer.DrawSeparator("Conversão de Tipo - Conversão Implícita");
+            Console.WriteLine();
+            SeparatorDrawer.DrawSeparator("Conversão Explicita");
+            Console.WriteLine();
 
             double v = 173233333252.763363337d;
             float w = (float)v;
@@ -103,35 +120,47 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             Console.WriteLine(GetIsOfTypeMessage(y));
             Console.WriteLine(GetIsOfTypeMessage(z));
 
+            Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
+
+            return this;
         }
 
         /// <summary>
         /// Demonstra como os tipos de valor e referência funcionam.
         /// </summary>
-        public void TiposDeValorEReferencia()
+        public Variaveis TiposDeValorEReferencia()
         {
             SeparatorDrawer.DrawSeparator("Tipos de Valor e Referência");
+            Console.WriteLine();
             SeparatorDrawer.DrawSeparator("Atribuição por Valor");
+            Console.WriteLine();
 
             int w = 0;
             int x = w;
             DrawAddressTableEntry(&w, nameof(w));
             DrawAddressTableEntry(&x, nameof(x));
 
-            SeparatorDrawer.DrawSeparator("Atribuição por Referência");
-
-            string y = "referência";
-            string z = y;
-            DrawAddressTableEntry(&y, $"variável {nameof(y)}");
-            DrawAddressTableEntry(&z, $"variável {nameof(z)}");
-
+            Console.WriteLine();
+            SeparatorDrawer.DrawSeparator("Atribuição por Referência - Endereço da Variável");
             Console.WriteLine();
 
-            DrawAddressTableEntry(y, $"valor de {nameof(y)}");
-            DrawAddressTableEntry(z, $"valor de {nameof(z)}");
+            object y = new();
+            object z = y;
+            DrawAddressTableEntry(&y, nameof(y));
+            DrawAddressTableEntry(&z, nameof(z));
 
+            Console.WriteLine();
+            SeparatorDrawer.DrawSeparator("Atribuição por Referência - Endereço do Valor");
+            Console.WriteLine();
+
+            DrawAddressTableEntry(y, nameof(y));
+            DrawAddressTableEntry(z, nameof(z));
+
+            Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
+
+            return this;
         }
 
         #region Helpers
@@ -143,7 +172,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <returns>Um endereço de memória em string.</returns>
         private string StringfyAddress<T>(T* pointer)
         {
-            string addressToHexadecimal = ((int)pointer).ToString("X");
+            string addressToHexadecimal = ((nint)pointer).ToString("X");
             return $"0x{addressToHexadecimal}";
         }
 
