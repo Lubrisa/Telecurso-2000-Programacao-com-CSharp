@@ -1,4 +1,4 @@
-namespace Telecurso2000Programacao.Drawers
+namespace Telecurso2000Programacao.Ferramentas
 {
     /// <summary>
     /// Handles the work of drawing separator lines in the console to divide subjects written on it.

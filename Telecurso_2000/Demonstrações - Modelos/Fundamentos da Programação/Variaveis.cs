@@ -1,18 +1,18 @@
 using System.Runtime.InteropServices;
-using Telecurso2000Programacao.Drawers;
+using Telecurso2000Programacao.Ferramentas;
 
-namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Modelo
+namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramacao
 {
     /// <summary>
     /// Modelo para a demonstração prática da aula sobre variáveis.
     /// </summary>
-    public unsafe class Variaveis
+    public static unsafe class Variaveis
     {
 #pragma warning disable CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
         /// <summary>
         /// Demonstra como as variáveis funcionam internamente (expõe o endereço subjacente).
         /// </summary>
-        public Variaveis Definicao()
+        public static void Definicao()
         {
             SeparatorDrawer.DrawSeparator("Definição de variável");
             Console.WriteLine();
@@ -26,14 +26,12 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
 
             Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
-
-            return this;
         }
 
         /// <summary>
         /// Demonstra quais são os tipos primitivos do C#.
         /// </summary>
-        public Variaveis TiposPrimitivos()
+        public static void TiposPrimitivos()
         {
             SeparatorDrawer.DrawSeparator("Tipos Primitivos");
             Console.WriteLine();
@@ -56,14 +54,12 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
 
             Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
-
-            return this;
         }
 
         /// <summary>
         /// Demonstra como as variáveis são declaradas e atribuídas.
         /// </summary>
-        public Variaveis DeclaracaoEAtribuicao()
+        public static void DeclaracaoEAtribuicao()
         {
             SeparatorDrawer.DrawSeparator("Declaração e Atribuição");
             Console.WriteLine();
@@ -80,14 +76,12 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
 
             Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
-
-            return this;
         }
 
         /// <summary>
         /// Demonstra como funciona a conversão de tipo, tanto implícita quanto explicita.
         /// </summary>
-        public Variaveis TypeCasting()
+        public static void TypeCasting()
         {
             SeparatorDrawer.DrawSeparator("Conversão de Tipo");
             Console.WriteLine();
@@ -122,14 +116,12 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
 
             Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
-
-            return this;
         }
 
         /// <summary>
         /// Demonstra como os tipos de valor e referência funcionam.
         /// </summary>
-        public Variaveis TiposDeValorEReferencia()
+        public static void TiposDeValorEReferencia()
         {
             SeparatorDrawer.DrawSeparator("Tipos de Valor e Referência");
             Console.WriteLine();
@@ -159,8 +151,6 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
 
             Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
-
-            return this;
         }
 
         #region Helpers
@@ -170,7 +160,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <typeparam name="T">Tipo da variável referenciada pelo ponteiro.</typeparam>
         /// <param name="pointer">O ponteiro que terá sua referência convertida.</param>
         /// <returns>Um endereço de memória em string.</returns>
-        private string StringfyAddress<T>(T* pointer)
+        private static string StringfyAddress<T>(T* pointer)
         {
             string addressToHexadecimal = ((nint)pointer).ToString("X");
             return $"0x{addressToHexadecimal}";
@@ -182,7 +172,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <typeparam name="T">O tipo da referência.</typeparam>
         /// <param name="obj">O objeto que terá seu endereço retornado.</param>
         /// <returns>Um endereço de memória em string.</returns>
-        private string StringfyAddress<T>(T obj) where T : class
+        private static string StringfyAddress<T>(T obj) where T : class
         {
             var handle = GCHandle.Alloc(obj, GCHandleType.Pinned);
             string handleToHexadecimal = handle.AddrOfPinnedObject().ToString("X");
@@ -197,7 +187,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <typeparam name="T">O tipo da variável referenciada pelo ponteiro.</typeparam>
         /// <param name="pointer">Um ponteiro com uma referência a um endereço de memória.</param>
         /// <param name="variableName">O nome da variável referenciada pelo ponteiro.</param>
-        private void DrawAddressTableEntry<T>(T* pointer, string variableName)
+        private static void DrawAddressTableEntry<T>(T* pointer, string variableName)
         {
             string variableColum = $"Variável: {variableName}".PadRight(25);
             string valueColum = $"Valor: {*pointer}".PadRight(25);
@@ -206,7 +196,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
             Console.WriteLine(variableColum + valueColum + addressColum);
         }
 
-        private void DrawAddressTableEntry<T>(T obj, string variableName) where T : class
+        private static void DrawAddressTableEntry<T>(T obj, string variableName) where T : class
         {
             string variableColum = $"Variável: {variableName}".PadRight(25);
             string valueColum = $"Valor: {obj}".PadRight(25);
@@ -221,7 +211,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <typeparam name="T">O tipo que será descrito.</typeparam>
         /// <param name="notes">Notas sobre o tipo descrito.</param>
         /// <param name="values">Valores importantes do tipo descrito.</param>
-        private void DrawTypeTableEntry<T>(string notes = "", params T[] values) where T : struct
+        private static void DrawTypeTableEntry<T>(string notes = "", params T[] values) where T : struct
         {
             string typeColum = $"Tipo: {typeof(T).Name}".PadRight(25);
 
@@ -242,7 +232,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <typeparam name="T">O tipo da variável que será verificada.</typeparam>
         /// <param name="pointer">Um ponteiro com o endereço da variável que será verificada.</param>
         /// <returns>True se a variável foi inicializada, false caso ela provavelmente não tenha sido.</returns>
-        private bool WasInitialized<T>(T* pointer) => !Equals(*pointer, default(T));
+        private static bool WasInitialized<T>(T* pointer) => !Equals(*pointer, default(T));
 
         /// <summary>
         /// Cria uma mensagem que corresponde a como uma variável foi declarada de acordo com seu estado atual.
@@ -251,7 +241,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <param name="pointer">Um ponteiro para o endereço da variável que será escrita.</param>
         /// <param name="variableName">O nome da variável escrita.</param>
         /// <returns>Uma mensagem que corresponde a como a variável deve ter sido declarada de acordo com seu valor atual.</returns>
-        private string GetVariableDeclaration<T>(T* pointer, string variableName)
+        private static string GetVariableDeclaration<T>(T* pointer, string variableName)
         {
             const string UNINITIALIZED_MESSAGE = "// A variável provavelmente não foi inicializada";
             const string INITIALIZED_MESSAGE = "// A variável foi inicializada";
@@ -269,7 +259,7 @@ namespace Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Mo
         /// <typeparam name="T">O tipo do valor que será descrito na mensagem.</typeparam>
         /// <param name="value">O valor que terá seu tipo descrito.</param>
         /// <returns>Uma mensagem dizendo qual é o tipo do valor passado.</returns>
-        private string GetIsOfTypeMessage<T>(T value)
+        private static string GetIsOfTypeMessage<T>(T value)
         {
             const string IS_OF_TYPE_MESSAGE = "é um valor do tipo: ";
 

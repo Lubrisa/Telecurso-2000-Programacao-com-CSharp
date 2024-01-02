@@ -1,4 +1,7 @@
-﻿using Telecurso2000Programacao.FundamentosDaProgramação.Demonstrações.Modelo;
+﻿using Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramacao;
 
-var v = new Variaveis();
-v.TiposDeValorEReferencia();
+Variaveis.Definicao();
+Variaveis.TiposPrimitivos();
+Variaveis.DeclaracaoEAtribuicao();
+Variaveis.TypeCasting();
+Variaveis.TiposDeValorEReferencia();
