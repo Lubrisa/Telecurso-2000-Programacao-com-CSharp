@@ -13,7 +13,7 @@ namespace Telecurso2000Programacao.Ferramentas
         /// Draws an separator line in the console.
         /// </summary>
         /// <param name="separatorTitle">A word or phrase that will be in the middle of the separator.</param>
-        public static void DrawSeparator(string separatorTitle = "Fim")
+        public static void DrawSeparator(string separatorTitle = "")
         {
             int linesLength = separatorTitle.Length is var titleLength && isEven(titleLength) ?
                 (EVEN_SEPARATOR_LENGTH - titleLength) / 2 : (ODD_SEPARATOR_LENGTH - titleLength) / 2;
