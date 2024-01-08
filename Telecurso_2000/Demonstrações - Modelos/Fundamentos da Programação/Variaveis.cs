@@ -69,18 +69,6 @@ namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramaca
         }
 
         /// <summary>
-        /// Demonstra como as variáveis são declaradas e atribuídas.
-        /// </summary>
-        public static void DeclaracaoEAtribuicao()
-        {
-            SeparatorDrawer.DrawSeparator("Declaração e Atribuição");
-            Console.WriteLine();
-
-            Console.WriteLine();
-            SeparatorDrawer.DrawSeparator();
-        }
-
-        /// <summary>
         /// Demonstra como funciona a conversão de tipo, tanto implícita quanto explicita.
         /// </summary>
         public static void TypeCasting()
@@ -90,9 +78,41 @@ namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramaca
             SeparatorDrawer.DrawSeparator("Conversão Implícita");
             Console.WriteLine();
 
+            char c = 'L';
+            int i = c;
+            long l = i;
+            float f = l;
+            double d = f;
+
+            Console.WriteLine(
+                TypeDataTableDrawer.DrawTable([
+                    new ParTipoValor(c.GetType(), c),
+                    new ParTipoValor(i.GetType(), i),
+                    new ParTipoValor(l.GetType(), l),
+                    new ParTipoValor(f.GetType(), f),
+                    new ParTipoValor(d.GetType(), d),
+                ])
+            );
+
             Console.WriteLine();
             SeparatorDrawer.DrawSeparator("Conversão Explicita");
             Console.WriteLine();
+
+            double d2 = double.Pi;
+            float f2 = (float)d2;
+            long l2 = (long)f2;
+            int i2 = (int)l2;
+            char c2 = (char)i2;
+
+            Console.WriteLine(
+                TypeDataTableDrawer.DrawTable([
+                    new ParTipoValor(d2.GetType(), d2),
+                    new ParTipoValor(f2.GetType(), f2),
+                    new ParTipoValor(l2.GetType(), l2),
+                    new ParTipoValor(i2.GetType(), i2),
+                    new ParTipoValor(c2.GetType(), c2),
+                ])
+            );
 
             Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
@@ -186,6 +206,8 @@ namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramaca
                     .Stringify();
             }
         };
+
+        private readonly record struct ParTipoValor(Type Tipo, object Valor);
 #pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
     }
 }
