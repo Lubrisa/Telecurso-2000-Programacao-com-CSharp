@@ -1,6 +1,4 @@
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Reflection;
 using Telecurso2000Programacao.Ferramentas;
 
 namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramacao
@@ -27,11 +25,11 @@ namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramaca
 
             Console.WriteLine(
                 TypeDataTableDrawer.DrawTable([
-                new Variavel<object>(nameof(inteiro), inteiro, &inteiro),
-                new Variavel<object>(nameof(real), real, &real),
-                new Variavel<object>(nameof(caractere), caractere, &caractere),
-                new Variavel<object>(nameof(texto), texto, &texto),
-                new Variavel<object>(nameof(confirmacao), confirmacao, &confirmacao)
+                    new Variavel<object>(nameof(inteiro), inteiro, &inteiro),
+                    new Variavel<object>(nameof(real), real, &real),
+                    new Variavel<object>(nameof(caractere), caractere, &caractere),
+                    new Variavel<object>(nameof(texto), texto, &texto),
+                    new Variavel<object>(nameof(confirmacao), confirmacao, &confirmacao)
                 ])
             );
 
@@ -46,6 +44,25 @@ namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramaca
         {
             SeparatorDrawer.DrawSeparator("Tipos Primitivos");
             Console.WriteLine();
+
+            Console.WriteLine(
+                TypeDataTableDrawer.DrawTable([
+                new Primitivo(typeof(bool)),
+                new Primitivo(typeof(byte)),
+                new Primitivo(typeof(char)),
+                new Primitivo(typeof(double)),
+                new Primitivo(typeof(float)),
+                new Primitivo(typeof(int)),
+                new Primitivo(typeof(long)),
+                new Primitivo(typeof(short)),
+                new Primitivo(typeof(sbyte)),
+                new Primitivo(typeof(uint)),
+                new Primitivo(typeof(ulong)),
+                new Primitivo(typeof(ushort)),
+                new Primitivo(typeof(nint)),
+                new Primitivo(typeof(nuint)),
+                ])
+            );
 
             Console.WriteLine();
             SeparatorDrawer.DrawSeparator();
@@ -120,124 +137,6 @@ namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramaca
 
                 return ADDRESS_PREFIX + Address.ToString("X");
             }
-
-            /// <summary>
-            /// Builds a string representing a entry in a table that contains a variable's name, memory address and value.
-            /// </summary>
-            /// <param name="variable">The variable that will be used to build the table entry.</param>
-            /// <returns>A string formatted like a table entry containing the info about the given variable.</returns>
-            public static string GetAddressTableEntry<T>(Variavel<T> variable)
-            {
-                const string NAME_LABEL = $"Nome";
-                const string ADDRESS_LABEL = $"Endereço";
-                const string VALUE_LABEL = $"Valor";
-                const string NULL_VALUE_LABEL = "NULL";
-
-                int tableColumSize = GetLongestStringSize(NAME_LABEL,
-                    variable.Nome,
-                    ADDRESS_LABEL,
-                    variable.Endereco,
-                    VALUE_LABEL,
-                    variable.Valor?.ToString() ?? NULL_VALUE_LABEL);
-
-
-                string entryHeader = BuildTableEntryLine(tableColumSize, NAME_LABEL, ADDRESS_LABEL, VALUE_LABEL);
-                string entryBody = BuildTableEntryLine(tableColumSize,
-                    variable.Nome,
-                    variable.Endereco,
-                    variable.Valor?.ToString() ?? NULL_VALUE_LABEL);
-
-                return BuildTableEntry(entryHeader, entryBody);
-            }
-
-            /// <summary>
-            /// Builds a string representing a entry in a table that contains a primitive type name, and default value.
-            /// </summary>
-            /// <param name="T">The primitive type that will be have it's info listed in the table.</param>
-            /// <returns>A string formatted like a table entry containing the info about the given primitive.</returns>
-            public static string GetPrimitiveInfoTableEntry<T>() where T : unmanaged
-            {
-                const string NAME_LABEL = "Nome";
-                const string DEFAULT_LABEL = "Valor Padrão";
-
-                string typeName = typeof(T).Name;
-                string typeDefaultValue = typeof(T) == typeof(char) ? "\"\"" : default(T).ToString()!;
-
-                int tableColumSize = GetLongestStringSize(NAME_LABEL,
-                    typeName,
-                    DEFAULT_LABEL,
-                    typeDefaultValue);
-
-                string entryHeader = BuildTableEntryLine(tableColumSize, NAME_LABEL, DEFAULT_LABEL);
-                string entryBody = BuildTableEntryLine(tableColumSize, typeName, typeDefaultValue);
-
-                return BuildTableEntry(entryHeader, entryBody);
-            }
-
-            /// <summary>
-            /// Find and return the size of the longest string between the given strings.
-            /// </summary>
-            /// <param name="strings">The strings that will have their lengths compared.</param>
-            /// <returns>The length of the longest string. 0 if the given array is empty.</returns>
-            /// <exception cref="ArgumentException"></exception>
-            private static int GetLongestStringSize(params string[] strings)
-            {
-                if (strings is null)
-                    throw new ArgumentException("The argument is null");
-
-                if (strings.Length == 0)
-                    return 0;
-
-                return strings
-                    .MaxBy(texto => texto?.Length ?? 0)?
-                    .Length ?? 0;
-            }
-
-            /// <summary>
-            /// Builds a line of a table entry body with the columns values.
-            /// </summary>
-            /// <param name="columnsSize">The size of each column.</param>
-            /// <param name="columnsValues">The text contained in each column.</param>
-            /// <returns>A string with the table entry body.</returns>
-            /// <exception cref="ArgumentException"></exception>
-            private static string BuildTableEntryLine(int columnsSize, params string[] columnsValues)
-            {
-                if (columnsValues is null)
-                    throw new ArgumentException("The \"columnsValues\" argument is null");
-
-                const char SEPARATOR_CHAR = '|';
-
-                var sb = new StringBuilder(SEPARATOR_CHAR.ToString());
-                foreach (var valueString in from columnValue in columnsValues
-                                            select columnValue?.ToString())
-                {
-                    sb.Append(valueString)
-                        .Append(string.Empty.PadRight(columnsSize - valueString.Length))
-                        .Append(SEPARATOR_CHAR);
-                }
-
-                return sb.ToString();
-            }
-
-            /// <summary>
-            /// Builds the entry of a table with the given entry body (content).
-            /// </summary>
-            /// <param name="entryBody"></param>
-            /// <returns></returns>
-            private static string BuildTableEntry(params string[] entryBody)
-            {
-                int tableLength = GetLongestStringSize(entryBody);
-
-                string tableSeparator = string.Empty.PadRight(tableLength, '-');
-
-                var sb = new StringBuilder();
-                foreach (var entryLayer in entryBody)
-                    sb.AppendLine(tableSeparator)
-                        .AppendLine(entryLayer);
-                sb.Append(tableSeparator);
-
-                return sb.ToString();
-            }
         }
 
         /// <summary>
@@ -259,6 +158,34 @@ namespace Telecurso2000Programacao.Demonstracoes.Modelos.FundamentosDaProgramaca
             public Variavel(string nome, T valor, T* endereco) : this(nome, valor) =>
                 Endereco = VariaveisDrawer.StringifyAddress(endereco);
         }
+
+        private readonly record struct Primitivo()
+        {
+            public readonly string Nome { get; init; }
+            public readonly string Default { get; init; }
+            public readonly string ValoresImportantes { get; init; }
+
+            public Primitivo(Type tipoInfo) : this()
+            {
+                if (!tipoInfo.IsPrimitive)
+                    throw new ArgumentException(
+                        $"O tipo {tipoInfo.Name} não é primitivo"
+                    );
+
+                Nome = tipoInfo.Name;
+
+                object valorDefault = tipoInfo.DefaultValue()!;
+                Default = valorDefault.ToString()!;
+
+                var campos =
+                    from campo in tipoInfo.GetFields()
+                    select campo.GetValue(valorDefault)!.ToString();
+
+                ValoresImportantes = campos
+                    .ToArray()
+                    .Stringify();
+            }
+        };
 #pragma warning restore CS8500 // Isso pega o endereço, obtém o tamanho ou declara um ponteiro para um tipo gerenciado
     }
 }
